@@ -89,3 +89,26 @@ pct_removed <- 100 * rows_removed / rows_before
 cat(sprintf("  Rows before: %d\n", rows_before))
 cat(sprintf("  Rows removed: %d (%.1f%%)\n", rows_removed, pct_removed))
 cat(sprintf("  Rows after:  %d\n\n", rows_after))
+
+
+dup_tickers <- df_clean %>%
+  group_by(ticker) %>%
+  filter(n() > 1) %>%
+  pull(ticker) %>%
+  unique()
+
+if (length(dup_tickers) > 0) {
+  cat(sprintf("  found %d duplicate tickers:\n", length(dup_tickers)))
+  for (t in dup_tickers) {
+    cat(sprintf("    %s\n", t))
+  }
+  cat("  keep first occurrence only.\n\n")
+  df_clean <- df_clean %>%
+    group_by(ticker) %>%
+    slice(1) %>%
+    ungroup()
+} else {
+  cat("  no duplicate tickers found\n\n")
+}
+
+cat(sprintf("  final row count: %d\n\n", nrow(df_clean)))

@@ -76,3 +76,16 @@ if (nrow(missing_summary) > 0) {
 } else {
   cat("  no missing values in any columns\n\n")
 }
+
+rows_before <- nrow(df_clean)
+
+df_clean <- df_clean %>%
+  drop_na(all_of(core_metrics))
+
+rows_after <- nrow(df_clean)
+rows_removed <- rows_before - rows_after
+pct_removed <- 100 * rows_removed / rows_before
+
+cat(sprintf("  Rows before: %d\n", rows_before))
+cat(sprintf("  Rows removed: %d (%.1f%%)\n", rows_removed, pct_removed))
+cat(sprintf("  Rows after:  %d\n\n", rows_after))

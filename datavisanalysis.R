@@ -132,3 +132,21 @@ ggsave("charts/exploratory_3_sector_counts.png", p_e3,
        width = 10, height = 6, dpi = 300)
 
 
+p_e4 <- df %>%
+  filter(!is.na(volatility_1y_ann), volatility_1y_ann < 200) %>%
+  mutate(asset_class = fct_reorder(asset_class, volatility_1y_ann, .fun = median)) %>%
+  ggplot(aes(x = asset_class, y = volatility_1y_ann, fill = asset_class)) +
+  geom_violin(alpha = 0.75, colour = NA) +
+  geom_boxplot(width = 0.2, fill = "white", colour = "grey40", alpha = 0.8) +
+  scale_fill_manual(values = asset_palette, guide = "none") +
+  scale_y_continuous(labels = label_percent(scale = 1)) +
+  coord_flip() +
+  labs(
+    title    = "Volatility distributions by asset class",
+    subtitle = "Violin shows full distribution and box shows quartiles",
+    x = NULL,
+    y = "Annualised volatility",
+  )
+
+ggsave("charts/exploratory_4_volatility_boxplot.png", p_e4,
+       width = 10, height = 6, dpi = 300)

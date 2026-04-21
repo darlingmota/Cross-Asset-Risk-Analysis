@@ -15,5 +15,25 @@ df_raw <- read_csv("yahoo_finance_global_markets_2026.csv",
 cat(sprintf(" rows: %d\n", nrow(df_raw)))
 cat(sprintf(" columns: %d\n", ncol(df_raw)))
 
-keep_cols <- c
+keep_cols <- c(
+  "ticker",
+  "symbol",
+  "shortName",
+  "asset_class",
+  "quoteType",
+  
+  "country",
+  "sector",
+  "industry",
+  "exchange",
+  "currency",
+  
+  "return_1y_pct",
+  "volatility_1y_ann",
+  "sharpe_1y",
+  "max_drawdown_1y_pct",
+  
+  "price_date",
+  "build_timestamp",
+)
 

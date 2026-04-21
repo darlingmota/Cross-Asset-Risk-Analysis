@@ -56,3 +56,29 @@ dir.create("charts", showWarnings = FALSE)
 
 
 
+
+p_e1 <- df %>%
+  count(asset_class) %>%
+  mutate(
+    asset_class = fct_reorder(asset_class, n),
+    pct = n / sum(n) * 100
+  ) %>%
+  ggplot(aes(area = n, fill = asset_class, label = asset_class)) +
+  geom_treemap(colour = "white", size = 3) +
+  geom_treemap_text(
+    colour = "white",
+    place = "centre",
+    size = 12,
+    fontface = "bold",
+    family = "Helvetica"
+  ) +
+  scale_fill_manual(values = asset_palette, guide = "none") +
+  labs(
+    title    = "Dataset composition by asset class",
+    subtitle = "449 instruments. Size = count, colour = class"
+  )
+
+ggsave("charts/exploratory_1_asset_class_counts.png", p_e1,
+       width = 10, height = 6, dpi = 300)
+
+

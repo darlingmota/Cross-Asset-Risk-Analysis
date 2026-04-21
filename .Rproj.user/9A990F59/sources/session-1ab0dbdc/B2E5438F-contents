@@ -34,7 +34,7 @@ keep_cols <- c(
   "max_drawdown_1y_pct",
   
   "price_date",
-  "build_timestamp",
+  "build_timestamp"
 )
 
 cat(sprintf("Identifiers: 5 columns\n"))
@@ -50,3 +50,10 @@ if (length(missing_cols) > 0) {
 }
 
 cat("  all 16 required columns found in raw data\n\n")
+
+df_clean <- df_raw %>%
+  select(all_of(keep_cols))
+
+cat(sprintf(" columns selected: %d\n", ncol(df_clean)))
+cat(sprintf(" rows selected: %d\n", nrow(df_clean)))
+

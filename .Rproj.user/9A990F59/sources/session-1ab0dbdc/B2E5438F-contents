@@ -153,6 +153,16 @@ for (col in core_metrics) {
   cat(sprintf("    Stdev:   %10.2f\n\n", sd(data, na.rm = TRUE)))
 }
 
+asset_dist <- df_clean %>%
+  count(asset_class, sort = TRUE) %>%
+  mutate(pct = sprintf("%.1f%%", 100 * n / sum(n)))
+
+for (i in 1:nrow(asset_dist)) {
+  row <- asset_dist[i, ]
+  cat(sprintf(" %15s: %3d (%s)\n, row$asset_class, row$n, row$pct"))
+}
+
+
 
   
   

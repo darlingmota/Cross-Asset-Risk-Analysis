@@ -140,3 +140,19 @@ if (ret_extreme > 0) {
 }
 
 cat(sprintf("\n  final validated row count: %d\n\n", nrow(df_clean)))
+
+for (col in core_metrics) {
+  data <- df_clean[[col]]
+  cat(sprintf("  %s:\n", col))
+  cat(sprintf("    Min:     %10.2f\n", min(data, na.rm = TRUE)))
+  cat(sprintf("    Q1:      %10.2f\n", quantile(data, 0.25, na.rm = TRUE)))
+  cat(sprintf("    Median:  %10.2f\n", median(data, na.rm = TRUE)))
+  cat(sprintf("    Q3:      %10.2f\n", quantile(data, 0.75, na.rm = TRUE)))
+  cat(sprintf("    Max:     %10.2f\n", max(data, na.rm = TRUE)))
+  cat(sprintf("    Mean:    %10.2f\n", mean(data, na.rm = TRUE)))
+  cat(sprintf("    Stdev:   %10.2f\n\n", sd(data, na.rm = TRUE)))
+}
+
+
+  
+  

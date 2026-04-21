@@ -50,3 +50,9 @@ my_theme <- theme_minimal(base_size = 12, base_family = "Helvetica") +
   )
 
 theme_set(my_theme)
+
+
+dir.create("charts", showWarnings = FALSE)
+
+
+

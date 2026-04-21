@@ -57,3 +57,22 @@ df_clean <- df_raw %>%
 cat(sprintf(" columns selected: %d\n", ncol(df_clean)))
 cat(sprintf(" rows selected: %d\n", nrow(df_clean)))
 
+core_metrics <- c("return_1y_pct", "volatility_1y_ann", "sharpe_1y",
+                  "max_drawdown_1y_pct")
+missing_summary <- df_clean %>%
+  summarise(across(everything(), ~sum(is.na(.)))) %>%
+  pivot_longer(everything(), names_to = "column", values_to = "count") %>%
+  filter(count > 0) %>%
+  arrange(desc(count))
+
+if (nrow(missing_summary) > 0) {
+  cat("  Missing values found:\n")
+  for (i in 1:nrow(missing_summary)) {
+    row <- missing_summary[i, ]
+    pct <- 100 * row$count / nrow(df_clean)
+    cat(sprintf("    %s: %d (%.1f%%)\n", row$column, row$count, pct))
+  }
+  cat("\n")
+} else {
+  cat("  no missing values in any columns\n\n")
+}

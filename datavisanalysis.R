@@ -150,3 +150,48 @@ p_e4 <- df %>%
 
 ggsave("charts/exploratory_4_volatility_boxplot.png", p_e4,
        width = 10, height = 6, dpi = 300)
+
+
+
+label_set <- c("SOXL", "FSLY", "JNJ", "TD", "LRCX", "BTC-USD", "ETH-USD", "GC=F")
+
+p_x1 <- df %>%
+  filter(!is.na(volatility_1y_ann), !is.na(return_1y_pct),
+         volatility_1y_ann < 150, between(return_1y_pct, -100, 300)) %>%
+  ggplot(aes(x = volatility_1y_ann, y = return_1y_pct, colour = asset_class)) +
+
+  stat_density_2d(
+    geom = "contour",
+    alpha = 0.1,
+    colour = "grey70",
+    bins = 5
+  ) +
+  geom_hline(yintercept = 0, linetype = "dashed", linewidth = 0.5, alpha = 0.3) +
+  geom_vline(xintercept = median(df$volatility_1y_ann, na.rm = TRUE), 
+             linetype = "dotted", linewidth = 0.5, alpha = 0.3) +
+  geom_point(alpha = 0.7, size = 3, stroke = 0.5) +
+  geom_text_repel(
+    data = . %>% filter(ticker %in% label_set),
+    aes(label = ticker),
+    colour = "black",
+    size = 3.5,
+    fontface = "bold",
+    min.segment.length = 0,
+    max.overlaps = Inf,
+    box.padding = 0.5,
+    segment.colour = "grey70"
+  ) +
+  scale_colour_manual(values = asset_palette) +
+  scale_y_continuous(labels = label_percent(scale = 1)) +
+  scale_x_continuous(labels = label_percent(scale = 1)) +
+  labs(
+    title    = "Risk vs return across 451 global instruments",
+    subtitle = "Density contours show clustering and higher vol = wider spread",
+    x = "Annualised volatility",
+    y = "1 year price return",
+    colour = "Asset class",
+  ) +
+  guides(colour = guide_legend(nrow = 1, override.aes = list(size = 4, stroke = 1)))
+
+ggsave("charts/explanatory_1_risk_return_scatter.png", p_x1,
+       width = 11, height = 7, dpi = 300)

@@ -195,3 +195,54 @@ p_x1 <- df %>%
 
 ggsave("charts/explanatory_1_risk_return_scatter.png", p_x1,
        width = 11, height = 7, dpi = 300)
+
+
+sharpe_by_class <- df %>%
+  filter(!is.na(sharpe_1y)) %>%
+  group_by(asset_class) %>%
+  summarise(
+    median_sharpe = median(sharpe_1y),
+    mean_sharpe = mean(sharpe_1y),
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  mutate(asset_class = fct_reorder(asset_class, median_sharpe))
+
+p_x2 <- sharpe_by_class %>%
+  ggplot(aes(x = median_sharpe, y = asset_class, colour = asset_class, size = n)) +
+  geom_segment(
+    aes(xend = 0, yend = asset_class),
+    colour = "grey80",
+    linewidth = 1
+  ) +
+  geom_point(alpha = 0.8) +
+  scale_colour_manual(values = asset_palette, guide = "none") +
+  scale_size_continuous(
+    name = "Sample size",
+    range = c(4, 10),
+    guide = guide_legend(position = "inside")
+  ) +
+  geom_vline(xintercept = 0, linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  annotate(
+    "text",
+    x = 0.5, y = 1,
+    label = "Risk adjustment flips the winners",
+    colour = "#d7301f",
+    size = 4,
+    fontface = "bold",
+    hjust = 0
+  ) +
+  labs(
+    title    = "Risk adjusted returns by asset class",
+    subtitle = "Median Sharpe ratio. Size of dot = sample size",
+    x = "Median Sharpe ratio. The higher = better",
+    y = NULL,
+  
+  ) +
+  theme(
+    legend.position.inside = c(0.98, 0.02),
+    legend.justification = c(1, 0)
+  )
+
+ggsave("charts/explanatory_2_sharpe_by_asset_class.png", p_x2,
+       width = 10, height = 6, dpi = 300)

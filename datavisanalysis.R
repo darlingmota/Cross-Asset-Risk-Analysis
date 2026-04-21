@@ -82,3 +82,25 @@ ggsave("charts/exploratory_1_asset_class_counts.png", p_e1,
        width = 10, height = 6, dpi = 300)
 
 
+p_e2 <- df %>%
+  filter(!is.na(return_1y_pct), !is.na(asset_class)) %>%
+  filter(return_1y_pct > -100, return_1y_pct < 300) %>%
+  mutate(asset_class = fct_reorder(asset_class, return_1y_pct, .fun = median)) %>%
+  ggplot(aes(x = return_1y_pct, y = asset_class, fill = asset_class)) +
+  ggridges::geom_density_ridges(
+    alpha = 0.75,
+    colour = "white",
+    linewidth = 1
+  ) +
+  geom_vline(xintercept = 0, linetype = "dashed", linewidth = 0.6, alpha = 0.5) +
+  scale_fill_manual(values = asset_palette, guide = "none") +
+  scale_x_continuous(labels = label_percent(scale = 1)) +
+  labs(
+    title    = "Return distributions by asset class",
+    subtitle = "Density curves show different shapes across classes",
+    x = "1 year price return",
+    y = NULL,
+  )
+
+ggsave("charts/exploratory_2_return_distribution.png", p_e2,
+       width = 10, height = 6, dpi = 300)

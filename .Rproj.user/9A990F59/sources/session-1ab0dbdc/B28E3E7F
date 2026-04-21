@@ -3,7 +3,7 @@
     "path": "~/Documents/GitHub/Cross-Asset-Risk-Analysis/datavisanalysis.R",
     "project_path": "datavisanalysis.R",
     "type": "r_source",
-    "hash": "3722580053",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1776769653209.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "9,0",
+        "cursorPosition": "2,16",
         "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1776769968,
+    "lastKnownWriteTime": 1776770226,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1776769968441,
+    "last_content_update": 1776770226248,
     "read_only": false,
     "read_only_alternatives": []
 }

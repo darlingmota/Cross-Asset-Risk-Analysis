@@ -34,3 +34,19 @@ asset_palette <- c(
   "CRYPTO"      = "#d7301f"
 )
 
+my_theme <- theme_minimal(base_size = 12, base_family = "Helvetica") +
+  theme(
+    plot.title    = element_text(face = "bold", size = 15, colour = "#1f4e79", margin = margin(b = 5)),
+    plot.subtitle = element_text(colour = "grey40", size = 11, margin = margin(b = 10)),
+    plot.caption  = element_text(colour = "grey50", size = 9, hjust = 0, margin = margin(t = 10)),
+    panel.grid.major = element_line(colour = "grey92", linewidth = 0.3),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "white", colour = NA),
+    plot.background = element_rect(fill = "white", colour = NA),
+    legend.position  = "bottom",
+    legend.title = element_blank(),
+    axis.text = element_text(colour = "grey40"),
+    axis.title = element_text(colour = "grey40", size = 11)
+  )
+
+theme_set(my_theme)

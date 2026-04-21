@@ -104,3 +104,31 @@ p_e2 <- df %>%
 
 ggsave("charts/exploratory_2_return_distribution.png", p_e2,
        width = 10, height = 6, dpi = 300)
+
+
+
+p_e3 <- df %>%
+  filter(quoteType == "EQUITY", !is.na(sector)) %>%
+  count(sector) %>%
+  mutate(
+    sector = fct_reorder(sector, n),
+    pct = n / sum(n) * 100
+  ) %>%
+  ggplot(aes(area = n, fill = n, label = paste0(sector, "\n(", n, ")"))) +
+  geom_treemap(colour = "white", size = 2.5) +
+  geom_treemap_text(
+    colour = "white",
+    place = "centre",
+    size = 10,
+    fontface = "bold"
+  ) +
+  scale_fill_gradient(low = "#B8E0D2", high = "#1f4e79", guide = "none") +
+  labs(
+    title    = "Equities composition by sector",
+    subtitle = "Size = number of companies, colour = intensity",
+  )
+
+ggsave("charts/exploratory_3_sector_counts.png", p_e3,
+       width = 10, height = 6, dpi = 300)
+
+

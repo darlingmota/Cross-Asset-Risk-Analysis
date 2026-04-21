@@ -246,3 +246,113 @@ p_x2 <- sharpe_by_class %>%
 
 ggsave("charts/explanatory_2_sharpe_by_asset_class.png", p_x2,
        width = 10, height = 6, dpi = 300)
+
+
+top_return <- df %>%
+  filter(!is.na(return_1y_pct)) %>%
+  slice_max(return_1y_pct, n = 10) %>%
+  mutate(rank = rank(-return_1y_pct)) %>%
+  select(ticker, return_1y_pct, asset_class, rank) %>%
+  mutate(type = "By Headline Return")
+
+
+top_sharpe <- df %>%
+  filter(!is.na(sharpe_1y)) %>%
+  slice_max(sharpe_1y, n = 10) %>%
+  mutate(rank = rank(-sharpe_1y)) %>%
+  select(ticker, sharpe_1y, asset_class, rank) %>%
+  rename(return_1y_pct = sharpe_1y) %>%
+  mutate(type = "By Risk Adjusted Return")
+
+
+both_lists <- bind_rows(
+  top_return %>% select(ticker, rank, type),
+  top_sharpe %>% select(ticker, rank, type)
+) %>%
+  group_by(ticker) %>%
+  filter(n() > 1) %>%
+  ungroup()
+
+overlap_n <- n_distinct(both_lists$ticker)
+
+
+p_left <- top_return %>%
+  mutate(ticker = fct_reorder(ticker, return_1y_pct)) %>%
+  ggplot(aes(x = ticker, y = return_1y_pct, fill = asset_class)) +
+  geom_col(alpha = 0.85, colour = "white", linewidth = 1) +
+  geom_text(
+    aes(label = sprintf("%.0f%%", return_1y_pct)),
+    hjust = -0.15,
+    size = 3.5,
+    fontface = "bold"
+  ) +
+
+  geom_vline(
+    xintercept = which(levels(fct_reorder(top_return$ticker, top_return$return_1y_pct)) %in% both_lists$ticker),
+    colour = "gold",
+    linewidth = 2,
+    alpha = 0.3
+  ) +
+  coord_flip() +
+  scale_fill_manual(values = asset_palette, drop = FALSE) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    title = "Top 10 by headline return",
+    x = NULL,
+    y = "1 year return (%)",
+    fill = NULL
+  ) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(size = 12, face = "bold")
+  )
+
+
+p_right <- top_sharpe %>%
+  mutate(ticker = fct_reorder(ticker, return_1y_pct)) %>%
+  ggplot(aes(x = ticker, y = return_1y_pct, fill = asset_class)) +
+  geom_col(alpha = 0.85, colour = "white", linewidth = 1) +
+  geom_text(
+    aes(label = sprintf("%.2f", return_1y_pct)),
+    hjust = -0.15,
+    size = 3.5,
+    fontface = "bold"
+  ) +
+  
+  geom_vline(
+    xintercept = which(levels(fct_reorder(top_sharpe$ticker, top_sharpe$return_1y_pct)) %in% both_lists$ticker),
+    colour = "gold",
+    linewidth = 2,
+    alpha = 0.3
+  ) +
+  coord_flip() +
+  scale_fill_manual(values = asset_palette, drop = FALSE) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    title = "Top 10 by risk-adjusted return",
+    x = NULL,
+    y = "Sharpe ratio 1 year",
+    fill = NULL
+  ) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(size = 12, face = "bold")
+  )
+
+
+p_x3 <- (p_left | p_right) +
+  plot_annotation(
+    title    = "The lists barely overlap, only shown with yellow background",
+    subtitle = sprintf("Only %d of 20 tickers appear in both top 10 lists", overlap_n),
+  
+    theme = theme(
+      plot.title    = element_text(face = "bold", size = 15, colour = "#1f4e79", margin = margin(b = 5)),
+      plot.subtitle = element_text(colour = "grey40", size = 11, margin = margin(b = 10)),
+      plot.caption  = element_text(colour = "grey50", size = 9, hjust = 0, margin = margin(t = 10))
+    )
+  )
+
+ggsave("charts/explanatory_3_top10_comparison.png", p_x3,
+       width = 12, height = 7, dpi = 300)
+
+

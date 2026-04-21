@@ -112,3 +112,31 @@ if (length(dup_tickers) > 0) {
 }
 
 cat(sprintf("  final row count: %d\n\n", nrow(df_clean)))
+
+vol_invalid <- df_clean %>%
+  filter(volatility_1y_ann <= 0) %>%
+  nrow()
+
+
+if (vol_invalid > 0) {
+  cat(sprintf("   %d rows with volatility <= 0 (removing)\n", vol_invalid))
+  df_clean <- df_clean %>%
+    filter(volatility_1y_ann > 0)
+}
+
+sharpe_extreme <- df_clean %>%
+  filter(sharpe_1y <-10 | sharpe_1y > 10) %>%
+  nrow()
+
+if (sharpe_extreme > 0) {
+  cat(sprintf("  %d rows with Sharpe ratio outside [-10, 10] (keeping)\n",
+              sharpe_extreme))
+  cat(" these extreme values are valid for crypto losses etc\n")
+}
+
+if (ret_extreme > 0) {
+  cat(sprintf("  %d rows with extreme returns >±100%% (keeping)\n",
+              ret_extreme))
+}
+
+cat(sprintf("\n  final validated row count: %d\n\n", nrow(df_clean)))

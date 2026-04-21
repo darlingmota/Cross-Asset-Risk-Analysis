@@ -3,7 +3,7 @@
     "path": "~/Documents/GitHub/Cross-Asset-Risk-Analysis/rawdatacsv.R",
     "project_path": "rawdatacsv.R",
     "type": "r_source",
-    "hash": "2396050634",
+    "hash": "1282432040",
     "contents": "",
     "dirty": false,
     "created": 1776756000969.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "36,20",
-        "scrollLine": "6"
+        "cursorPosition": "44,0",
+        "scrollLine": "11"
     },
     "folds": "",
-    "lastKnownWriteTime": 1776758128,
+    "lastKnownWriteTime": 1776758280,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1776758128267,
+    "last_content_update": 1776758280149,
     "read_only": false,
     "read_only_alternatives": []
 }

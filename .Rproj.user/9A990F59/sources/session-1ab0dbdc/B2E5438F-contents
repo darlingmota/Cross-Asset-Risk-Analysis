@@ -37,3 +37,8 @@ keep_cols <- c(
   "build_timestamp",
 )
 
+cat(sprintf("Identifiers: 5 columns\n"))
+cat(sprintf("Context: 5 columns\n"))
+cat(sprintf("Core Metrics: 4 columns\n"))
+cat(sprintf("Metadata: 2 columns\n"))
+cat(sprintf("Total: 16 columns (from 131)\n"))
